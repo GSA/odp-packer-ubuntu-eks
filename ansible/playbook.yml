@@ -1,0 +1,65 @@
+---
+
+- hosts: localhost
+  connection: local
+  gather_facts: true
+  become: yes
+  vars:
+    in_vm: true
+    ansible_distribution: "Amazon"
+    ansible_distribution_version: "(Karoo)"
+    cis_level_1_exclusions: [1.1.1.1, 1.1.1.2, 1.1.1.3, 1.1.1.4, 1.1.1.5, 1.1.1.6, 1.1.1.7, 1.1.1.8, 1.1.10, 1.1.11, 1.1.12, 1.1.13, 1.1.14, 1.1.17, 1.1.2, 1.1.3, 1.1.4, 1.1.5, 1.1.7, 1.1.8, 1.1.9, 3.3.3, 3.5.1.1, 4.2.1.4, 5.2.15, 5.2.18]
+  
+  pre_tasks:
+
+    - name: Retrieve secrets from AWS Secrets Manager
+      set_fact:
+        secret_text: "{{ lookup('aws_secret', 'sectools-jenkins/pipelines/eks-ami-hardening/amz-linux', region='us-east-1') }}"
+
+    - name: Make sure Secrets are successfully loaded
+      debug:
+        msg: "{{ secret_text | json_query('_debug') }}"
+
+  roles:
+
+  - role: odp-ansible-common-utils    
+    tags:
+    - always
+
+  - role: ansible-os-amazon-linux2-eks    
+    tags:
+    - always
+
+  - role: odp-ansible-fireeye
+    vars:
+      fireeye_cacert: "{{ secret_text | json_query('fireeye_cacert') }}"
+      fireeye_provocert: "{{ secret_text | json_query('fireeye_provocert') }}"
+      fireeye_provokey: "{{ secret_text | json_query('fireeye_provokey') }}"
+      fireeye_servers: [
+        "{{ secret_text | json_query('fireeye_servers[0]') }}",
+        "{{ secret_text | json_query('fireeye_servers[1]') }}"
+      ]
+      fireeye_package: "{{ secret_text | json_query('fireeye_package') }}"
+      fireeye_s3_bucket: "{{ secret_text | json_query('fireeye_s3_bucket') }}"
+      fireeye_s3_prefix: "{{ secret_text | json_query('fireeye_s3_prefix') }}"
+    tags:
+    - always
+    
+  - role: odp-ansible-cylance
+    vars:
+      cylance_zone: "{{ secret_text | json_query('cylance_zone') }}"
+      cylance_token: "{{ secret_text | json_query('cylance_token') }}"
+      cylance_version: "{{ secret_text | json_query('cylance_version') }}"
+      cylance_s3_bucket: "{{ secret_text | json_query('cylance_s3_bucket') }}"
+      cylance_s3_prefix: "{{ secret_text | json_query('cylance_s3_prefix') }}"
+    tags:
+    - always
+
+  - role: ise-ansible-nessus-agent
+    vars:
+      nessus_agent_key: "{{ secret_text | json_query('nessus_agent_key') }}"
+      nessus_server_url: "{{ secret_text | json_query('nessus_server_url') }}"
+      nessus_agent_artifacts_s3_bucket: "{{ secret_text | json_query('nessus_agent_artifacts_s3_bucket') }}"
+      nessus_agent_artifacts_s3_key: "{{ secret_text | json_query('nessus_agent_artifacts_s3_key') }}"
+    tags:
+    - always

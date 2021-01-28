@@ -1,0 +1,7 @@
+---
+
+- src: https://github.com/GSA/odp-ansible-common-utils
+- src: https://github.com/GSA/ansible-os-amazon-linux2-eks
+- src: https://github.com/GSA/odp-ansible-fireeye
+- src: https://github.com/GSA/odp-ansible-cylance
+- src: https://github.com/GSA/ise-ansible-nessus-agent

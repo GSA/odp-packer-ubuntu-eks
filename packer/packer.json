@@ -1,0 +1,70 @@
+{
+  "variables": {
+    "vpc": "",
+    "subnet": "",
+    "aws_region": "",
+    "ami_name": "",
+    "dir_project_root": ""
+  },
+  "builders": [
+    {
+      "name": "AWS AMI Builder " ,
+      "type": "amazon-ebs",
+      "region": "{{user `aws_region`}}",
+      "source_ami_filter": {
+        "filters": {
+          "virtualization-type": "hvm",
+          "name": "amazon-eks-node-1.18*",
+          "root-device-type": "ebs"
+        },
+        "owners": [ "602401143452" ],
+        "most_recent": true
+      },
+      "instance_type": "t2.small",
+      "ssh_username": "ec2-user",
+      "ssh_interface": "private_ip",
+      "ssh_timeout": "5m",
+      "iam_instance_profile": "ise-packer-test",
+      "ami_name": "{{user `ami_name` }}-{{timestamp}}",
+      "tags": {
+        "Name": "{{user `ami_name`}}"
+      },
+      "run_tags": {
+        "Name": "{{user `ami_name`}}"
+      },
+      "run_volume_tags": {
+        "Name": "{{user `ami_name`}}"
+      },
+      "snapshot_tags": {
+        "Name": "{{user `ami_name`}}"
+      },
+      "ami_description": "ISE Packer Test",
+      "associate_public_ip_address": "false",
+      "vpc_id": "{{user `vpc`}}",
+      "subnet_id": "{{user `subnet`}}",
+      "security_group_id": "sg-0db262f9a030ca3ea"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo yum install python3-devel git -y",
+        "sudo pip3 install ansible",
+        "sudo pip3 install boto3"
+      ]
+    },
+    {
+      "type": "ansible-local",
+      "playbook_dir": "./ansible",
+      "playbook_file": "./ansible/playbook.yml",
+      "galaxy_file": "./ansible/requirements.yml"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "rm .ssh/authorized_keys ; sudo rm /root/.ssh/authorized_keys"
+      ]
+    }
+  ]
+}

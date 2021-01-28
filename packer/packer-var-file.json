@@ -1,0 +1,6 @@
+{
+    "subnet": "subnet-a827c997", 
+    "ami_name": "ise-amazon-linux2-eks", 
+    "aws_region": "us-east-1", 
+    "vpc": "vpc-685a670f"
+}
