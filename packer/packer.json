@@ -21,7 +21,7 @@
         "most_recent": true
       },
       "instance_type": "t2.small",
-      "ssh_username": "ec2-user",
+      "ssh_username": "ubuntu",
       "ssh_interface": "private_ip",
       "ssh_timeout": "5m",
       "iam_instance_profile": "ise-packer-test",
