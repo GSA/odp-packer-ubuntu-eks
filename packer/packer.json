@@ -49,8 +49,11 @@
     {
       "type": "shell",
       "inline": [
+        "echo run sudo apt update",
         "sudo apt update",
+        "echo run sudo apt-get install python3-pip -y",
         "sudo apt-get install python3-pip -y",
+        "echo run pip3 install",
         "sudo pip3 install ansible",
         "sudo pip3 install boto3"
       ]
