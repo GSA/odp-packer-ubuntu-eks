@@ -49,12 +49,11 @@
     {
       "type": "shell",
       "inline": [
-        "which python",
-        "which pip",
+        "python --version",
         "ls /usr/bin | grep pip",
         "sudo apt-get install python3.6 -y",
-        "sudo pip3 install ansible",
-        "sudo pip3 install boto3"
+        "sudo pip3.6 install ansible",
+        "sudo pip3.6 install boto3"
       ]
     },
     {
