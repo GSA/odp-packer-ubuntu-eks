@@ -49,6 +49,9 @@
     {
       "type": "shell",
       "inline": [
+        "which python",
+        "which pip",
+        "ls /usr/bin | grep pip",
         "sudo apt-get install python3.6 -y",
         "sudo pip3 install ansible",
         "sudo pip3 install boto3"
