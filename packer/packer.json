@@ -52,6 +52,7 @@
         "python --version",
         "ls /usr/bin | grep pip",
         "sudo apt-get install python3.6 -y",
+        "sudo apt-get install python3-pip -y",
         "sudo pip3.6 install ansible",
         "sudo pip3.6 install boto3"
       ]
