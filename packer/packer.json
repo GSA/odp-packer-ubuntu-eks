@@ -49,6 +49,7 @@
     {
       "type": "shell",
       "inline": [
+        "sudo apt-get update -y",
         "sudo apt-get install python3.6 -y",
         "sudo apt-get install python3-pip -y",
         "sudo pip3.6 install ansible",
