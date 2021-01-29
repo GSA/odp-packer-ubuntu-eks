@@ -50,7 +50,7 @@
       "type": "shell",
       "inline": [
         "echo run sudo apt update",
-        "sudo apt update",
+        "sudo apt-get update",
         "echo run sudo apt-get install python3-pip -y",
         "sudo apt-get install python3-pip -y",
         "echo run pip3 install",
